@@ -12,6 +12,7 @@ import { loadTodos } from "../states/actions/todo/loadTodos"
 import { updateTodo } from '../states/actions/todo/updateTodo'
 import { connect } from "react-redux";
 import { getData } from '../api/mock'
+import { getCurrentDateStr } from "../helper/dateHelper";
 import { filterTodos, normalizeTodo, findTodoWithId } from "../helper/todoHelper";
 
 const mapStateToProps = state => ({
@@ -29,7 +30,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 class App extends React.Component {
   addNewItem() {
-    
+    this.props.openModal(0)
   }
 
   async loadData() {
@@ -47,12 +48,51 @@ class App extends React.Component {
     this.props.loadTodos(todos)
   }
 
+  loadCurrentTodo(id) {
+    let todo
+    if (id != 0) {
+      let index = findTodoWithId(this.props.todo.todos, id)
+      todo = this.props.todo.todos[index]
+    }
+
+    if (todo !== undefined) {
+      return todo;
+    }
+
+    return {
+      id: 0,
+      title: null,
+      description: null,
+      status: 0,
+      createdAt: getCurrentDateStr()
+    }
+  }
+
+  deleteTodo(id) {
+    this.props.deleteTodo(id)
+  }
+
+  saveTodo(id) {
+    let index = findTodoWithId(this.props.todo.todos, id)
+    let todo = this.props.todo.todos[index]
+    todo = {
+      ...todo,
+      title: document.querySelector("#input_todo-title").value,
+      description: document.querySelector("#input_todo-details").value,
+    }
+
+    this.props.updateTodo(todo)
+  }
+
+  addTodo() {
+    this.props.createTodo(document.querySelector("#input_todo-title").value, document.querySelector("#input_todo-details").value)
+  }
+
   unDoneTodo(e) {
     setTimeout(() => {
       const id = e.target.dataset.id
       if(id !== undefined && id !== null) {
         let index = findTodoWithId(this.props.todo.todos, id)
-        console.log(index)
         let todo = this.props.todo.todos[index]
         todo.status = 0
         this.props.updateTodo(todo)
@@ -134,18 +174,27 @@ class App extends React.Component {
         </div>
 
         <Modal
+          
           actions={[
             <Button flat modal="close" node="button" waves="green">Cancel</Button>,
-            <Button modal="close" node="button" waves="green">Save</Button>,
-            <Button className="red" modal="confirm" node="button" waves="light">Delete</Button>
+            <Button id="save-btn" onClick={e => this.props.navigation.openModal != 0 ?  this.saveTodo(this.props.navigation.openModal) : this.addTodo()} modal="close" node="button" waves="green">Save</Button>,
+            <Button id="delete-btn" onClick={e => this.deleteTodo(this.props.navigation.openModal)} style={this.loadCurrentTodo(this.props.navigation.openModal).status != 0 || this.loadCurrentTodo(this.props.navigation.openModal).id == 0 ? {display: 'none'} : {}} className="red" modal="confirm" node="button" waves="light">Delete</Button>
           ]}
           confirm="Are you sure?"
           bottomSheet={false}
           fixedFooter
-          header={<TextInput
-            id="input_todo-title"
-            label="Title"
-          />}
+          header={
+            <div className="row">
+              <div className="col s8">
+                <TextInput
+                  id="input_todo-title"
+                  label="Title"
+                  value={this.loadCurrentTodo(this.props.navigation.openModal).title}
+                />
+              </div>
+              <div id="date-todo" className="col s4">{this.loadCurrentTodo(this.props.navigation.openModal).createdAt}</div>
+            </div>
+          }
           id="main-modal"
           open={false}
           options={{
@@ -176,6 +225,7 @@ class App extends React.Component {
           <Textarea
             id="input_todo-details"
             label="Describe this todo item..."
+            value={this.loadCurrentTodo(this.props.navigation.openModal).description}
           />
         </Modal>
       </div>

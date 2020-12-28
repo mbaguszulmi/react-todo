@@ -31,7 +31,7 @@ export default (state = { }, action) => {
 
         case 'DELETE_TODO':
             todos = state.todos
-            const index = action.data - 1
+            const index = findTodoWithId(todos, action.data)
             if (index >= 0 && index < todos.length) {
                 todos.splice(index, 1)
             }
