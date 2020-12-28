@@ -1,3 +1,5 @@
+import { getCurrentDateStr } from "../helper/dateHelper";
+
 export const createTodo = (title, description) => dispatch => {
     dispatch({
         type: 'CREATE_TODO',
@@ -5,7 +7,7 @@ export const createTodo = (title, description) => dispatch => {
             title: title,
             description: description,
             status: 0,
-            createdAt: new Date().getTime()
+            createdAt: getCurrentDateStr()
         }
     })
 }
