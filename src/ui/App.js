@@ -8,9 +8,11 @@ import { openModal } from '../states/actions/navigation/openModal'
 import { createTodo } from '../states/actions/todo/createTodo'
 import { deleteTodo } from '../states/actions/todo/deleteTodo'
 import { loadTodoFromApi } from '../states/actions/todo/loadTodoFromApi'
+import { loadTodos } from "../states/actions/todo/loadTodos"
 import { updateTodo } from '../states/actions/todo/updateTodo'
 import { connect } from "react-redux";
 import { getData } from '../api/mock'
+import { filterTodos, normalizeTodo, findTodoWithId } from "../helper/todoHelper";
 
 const mapStateToProps = state => ({
   ...state
@@ -20,6 +22,7 @@ const mapDispatchToProps = (dispatch) => ({
   createTodo: (title, description) => dispatch(createTodo(title, description)),
   deleteTodo: id => dispatch(deleteTodo(id)),
   loadTodoFromApi: isLoading => dispatch(loadTodoFromApi(isLoading)),
+  loadTodos: todoList => dispatch(loadTodos(todoList)),
   updateTodo: todoData => dispatch(updateTodo(todoData)),
   openModal: id => dispatch(openModal(id))
 })
@@ -37,7 +40,48 @@ class App extends React.Component {
       console.error(error)
     })
 
-    console.log(todos);
+    todos = normalizeTodo(todos)
+
+    this.props.loadTodoFromApi(false)
+
+    this.props.loadTodos(todos)
+  }
+
+  unDoneTodo(e) {
+    setTimeout(() => {
+      const id = e.target.dataset.id
+      if(id !== undefined && id !== null) {
+        let index = findTodoWithId(this.props.todo.todos, id)
+        console.log(index)
+        let todo = this.props.todo.todos[index]
+        todo.status = 0
+        this.props.updateTodo(todo)
+
+        e.target.checked = true
+    
+        console.log(id)
+      }
+    }, 300);
+  }
+
+  doneTodo(e) {
+    setTimeout(() => {
+      const id = e.target.dataset.id
+      if(id !== undefined && id !== null) {
+        let index = findTodoWithId(this.props.todo.todos, id)
+        let todo = this.props.todo.todos[index]
+        todo.status = 1
+        this.props.updateTodo(todo)
+
+        e.target.checked = false
+
+        console.log(id)
+      }
+    }, 300);
+  }
+
+  editTodo(e) {
+    const id = e.target.dataset.id
   }
 
   componentDidMount() {
@@ -72,14 +116,18 @@ class App extends React.Component {
             <div className="col s12 m6">
               <h4>To-do</h4>
               <div id="todo-list">
-                <TodoItem todoId="1" todoTitle="OK"></TodoItem>
+                {filterTodos(this.props.todo.todos, false).map((value, index) => (
+                  <TodoItem onCheckChanged={e => this.doneTodo(e)} onTodoClick={e => this.editTodo(e)} completed={false} todoId={value.id} todoTitle={value.title}></TodoItem>
+                ))}
               </div>
             </div>
   
             <div className="col s12 m6">
               <h4>Completed</h4>
               <div id="completed-list">
-                <TodoItem className="completed" todoId="2" todoTitle="OK"></TodoItem>
+                {filterTodos(this.props.todo.todos, true).map((value, index) => (
+                  <TodoItem onCheckChanged={e => this.unDoneTodo(e)} onTodoClick={e => this.editTodo(e)} completed={true} todoId={value.id} todoTitle={value.title}></TodoItem>
+                ))}
               </div>
             </div>
           </div>

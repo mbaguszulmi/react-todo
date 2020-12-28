@@ -1,3 +1,5 @@
+import { findTodoWithId } from "../../helper/todoHelper";
+
 export default (state = { }, action) => {
     let todos;
     switch (action.type) {
@@ -19,7 +21,8 @@ export default (state = { }, action) => {
 
         case 'UPDATE_TODO':
             todos = state.todos
-            todos[action.data.id-1] = action.data
+            let i = findTodoWithId(todos, action.data.id)
+            todos[i] = action.data
 
             return {
                 ...state,
