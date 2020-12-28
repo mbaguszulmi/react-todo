@@ -1,4 +1,4 @@
-export const createTodo = (title, description) => {
+export const createTodo = (title, description) => dispatch => {
     dispatch({
         type: 'CREATE_TODO',
         data: {

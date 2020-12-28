@@ -1,4 +1,4 @@
-export const updateTodo = todoData => {
+export const updateTodo = todoData => dispatch => {
     dispatch({
         type: 'UPDATE_TODO',
         data: todoData
