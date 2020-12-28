@@ -4,8 +4,8 @@ import { Checkbox } from "react-materialize";
 class TodoItem extends React.Component {
     render() {
         return (
-            <div className="todo-item">
-                <Checkbox value="1" data-id={this.props.todoId} onChange={this.props.onCheckChanged} />
+            <div className={`todo-item ${this.props.className}`}>
+                <Checkbox id={`item_${this.props.todoId}`} value="1" data-id={this.props.todoId} onChange={this.props.onCheckChanged} />
                 <div className="todo-title" onClick={this.props.onTodoClick}>
                     {this.props.todoTitle}
                 </div>
