@@ -43,6 +43,12 @@ export default (state = { }, action) => {
                 ...state,
                 isLoadingData: action.data
             }
+
+        case 'LOAD_TODOS':
+            return {
+                ...state,
+                todos: action.data
+            }
     
         default:
             return state;
