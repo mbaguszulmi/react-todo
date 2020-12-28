@@ -1,0 +1,22 @@
+div.content {
+    padding: 10px 0;
+
+    div.todo-grid {
+        div.col {
+            padding: 0 10px;
+
+            div.todo-item {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+
+                .todo-title {
+                    padding-bottom: 5px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                }
+            }
+        }
+    }
+}

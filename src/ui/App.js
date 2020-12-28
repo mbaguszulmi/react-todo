@@ -1,6 +1,8 @@
 import 'materialize-css/dist/css/materialize.min.css'
 import 'materialize-css/dist/js/materialize'
-import { Navbar, NavItem, Icon } from "react-materialize";
+import { Navbar, Icon } from "react-materialize"
+import '../assets/css/main.scss'
+import TodoItem from '../components/TodoItem'
 
 function App() {
   return (
@@ -24,11 +26,22 @@ function App() {
           preventScrolling: true
         }}>
       </Navbar>
-      <div className="container">
-        Lorem ipsum dolor sit amet
+      <div className="container content">
+        <div className="row todo-grid">
+          <div className="col s12 m6">
+            <h4>To-do</h4>
+            <div className="todo-list">
+              <TodoItem todoId="1" todoTitle="OK"></TodoItem>
+            </div>
+          </div>
+
+          <div className="col s12 m6">
+          <h4>Completed</h4>
+          </div>
+        </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
