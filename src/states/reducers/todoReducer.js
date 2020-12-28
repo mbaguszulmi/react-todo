@@ -1,7 +1,8 @@
 export default (state = { }, action) => {
+    let todos;
     switch (action.type) {
         case 'CREATE_TODO':
-            const todos = state.todos
+            todos = state.todos
             if (todos === undefined || todos === null) {
                 todos = []
             }
@@ -17,7 +18,7 @@ export default (state = { }, action) => {
             }
 
         case 'UPDATE_TODO':
-            const todos = state.todos
+            todos = state.todos
             todos[action.data.id-1] = action.data
 
             return {
@@ -26,7 +27,7 @@ export default (state = { }, action) => {
             }
 
         case 'DELETE_TODO':
-            const todos = state.todos
+            todos = state.todos
             const index = action.data - 1
             if (index >= 0 && index < todos.length) {
                 todos.splice(index, 1)
