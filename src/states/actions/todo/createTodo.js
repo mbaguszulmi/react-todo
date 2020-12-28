@@ -1,10 +1,11 @@
-export const createTodo = (title, details) => {
+export const createTodo = (title, description) => {
     dispatch({
         type: 'CREATE_TODO',
         data: {
             title: title,
-            details: details,
-            createdOn: new Date().getTime()
+            description: description,
+            status: 0,
+            createdAt: new Date().getTime()
         }
     })
 }
