@@ -31,6 +31,9 @@ const mapDispatchToProps = (dispatch) => ({
 class App extends React.Component {
   addNewItem() {
     this.props.openModal(0)
+
+    document.querySelector("#input_todo-title").value = undefined
+    document.querySelector("#input_todo-details").value = undefined
   }
 
   async loadData() {
@@ -40,8 +43,6 @@ class App extends React.Component {
       M.toast({html: `Error occured ${error}`})
       console.error(error)
     })
-
-    todos = normalizeTodo(todos)
 
     this.props.loadTodoFromApi(false)
 
@@ -69,7 +70,9 @@ class App extends React.Component {
   }
 
   deleteTodo(id) {
-    this.props.deleteTodo(id)
+    setTimeout(() => {
+      this.props.deleteTodo(id)
+    }, 300);
   }
 
   saveTodo(id) {
@@ -122,6 +125,13 @@ class App extends React.Component {
 
   editTodo(e) {
     const id = e.target.dataset.id
+    this.props.openModal(id)
+    document.querySelector("#main-fab").click()
+
+    let todo = this.loadCurrentTodo(id)
+
+    document.querySelector("#input_todo-title").value = todo.title
+    document.querySelector("#input_todo-details").value = todo.description
   }
 
   componentDidMount() {
@@ -178,7 +188,7 @@ class App extends React.Component {
           actions={[
             <Button flat modal="close" node="button" waves="green">Cancel</Button>,
             <Button id="save-btn" onClick={e => this.props.navigation.openModal != 0 ?  this.saveTodo(this.props.navigation.openModal) : this.addTodo()} modal="close" node="button" waves="green">Save</Button>,
-            <Button id="delete-btn" onClick={e => this.deleteTodo(this.props.navigation.openModal)} style={this.loadCurrentTodo(this.props.navigation.openModal).status != 0 || this.loadCurrentTodo(this.props.navigation.openModal).id == 0 ? {display: 'none'} : {}} className="red" modal="confirm" node="button" waves="light">Delete</Button>
+            <Button id="delete-btn" modal="close" onClick={e => this.deleteTodo(this.props.navigation.openModal)} style={this.loadCurrentTodo(this.props.navigation.openModal).status != 0 || this.loadCurrentTodo(this.props.navigation.openModal).id == 0 ? {display: 'none'} : {}} className="red" node="button" waves="light">Delete</Button>
           ]}
           confirm="Are you sure?"
           bottomSheet={false}
@@ -187,9 +197,9 @@ class App extends React.Component {
             <div className="row">
               <div className="col s8">
                 <TextInput
+                  disabled={false}
                   id="input_todo-title"
                   label="Title"
-                  value={this.loadCurrentTodo(this.props.navigation.openModal).title}
                 />
               </div>
               <div id="date-todo" className="col s4">{this.loadCurrentTodo(this.props.navigation.openModal).createdAt}</div>
@@ -223,9 +233,9 @@ class App extends React.Component {
           />}
         >
           <Textarea
+            disabled={false}
             id="input_todo-details"
             label="Describe this todo item..."
-            value={this.loadCurrentTodo(this.props.navigation.openModal).description}
           />
         </Modal>
       </div>
