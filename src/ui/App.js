@@ -1,13 +1,47 @@
 import React from 'react'
 import 'materialize-css/dist/css/materialize.min.css'
-import 'materialize-css/dist/js/materialize'
+import M from 'materialize-css/dist/js/materialize'
 import { Navbar, Icon, Button, Modal, TextInput, Textarea } from "react-materialize"
 import '../assets/css/main.scss'
 import TodoItem from '../components/TodoItem'
+import { openModal } from '../states/actions/navigation/openModal'
+import { createTodo } from '../states/actions/todo/createTodo'
+import { deleteTodo } from '../states/actions/todo/deleteTodo'
+import { loadTodoFromApi } from '../states/actions/todo/loadTodoFromApi'
+import { updateTodo } from '../states/actions/todo/updateTodo'
+import { connect } from "react-redux";
+import { getData } from '../api/mock'
+
+const mapStateToProps = state => ({
+  ...state
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  createTodo: (title, description) => dispatch(createTodo(title, description)),
+  deleteTodo: id => dispatch(deleteTodo(id)),
+  loadTodoFromApi: isLoading => dispatch(loadTodoFromApi(isLoading)),
+  updateTodo: todoData => dispatch(updateTodo(todoData)),
+  openModal: id => dispatch(openModal(id))
+})
 
 class App extends React.Component {
   addNewItem() {
     
+  }
+
+  async loadData() {
+    this.props.loadTodoFromApi(true)
+
+    let todos = await getData().catch(error => {
+      M.toast({html: `Error occured ${error}`})
+      console.error(error)
+    })
+
+    console.log(todos);
+  }
+
+  componentDidMount() {
+    this.loadData()
   }
 
   render() {
@@ -101,4 +135,4 @@ class App extends React.Component {
   }
 }
 
-export default App
+export default connect(mapStateToProps, mapDispatchToProps)(App)
