@@ -29,11 +29,17 @@ const mapDispatchToProps = (dispatch) => ({
 })
 
 class App extends React.Component {
+  openModal() {
+    document.querySelector ("#main-modal").M_Modal.open()
+
+  }
+
   addNewItem() {
     this.props.openModal(0)
+    this.openModal()
 
-    document.querySelector("#input_todo-title").value = undefined
-    document.querySelector("#input_todo-details").value = undefined
+    document.querySelector("#input_todo-title").value = ''
+    document.querySelector("#input_todo-details").value = ''
   }
 
   async loadData() {
@@ -126,7 +132,7 @@ class App extends React.Component {
   editTodo(e) {
     const id = e.target.dataset.id
     this.props.openModal(id)
-    document.querySelector("#main-fab").click()
+    this.openModal()
 
     let todo = this.loadCurrentTodo(id)
 
@@ -136,6 +142,10 @@ class App extends React.Component {
 
   componentDidMount() {
     this.loadData()
+
+    document.querySelector("#main-fab").onClick = () => {
+      console.log("OK")
+    }
   }
 
   render() {
@@ -183,6 +193,18 @@ class App extends React.Component {
           </div>
         </div>
 
+        <Button
+          id="main-fab"
+          className="red"
+          floating
+          icon={<Icon>add</Icon>}
+          large
+          node="button"
+          waves="light"
+          fab="true"
+          onClick={() => this.addNewItem()}
+        />
+
         <Modal
           
           actions={[
@@ -220,17 +242,6 @@ class App extends React.Component {
             preventScrolling: true,
             startingTop: '4%'
           }}
-          trigger={<Button
-            id="main-fab"
-            className="red"
-            floating
-            icon={<Icon>add</Icon>}
-            large
-            node="button"
-            waves="light"
-            fab="true"
-            onClick={this.addNewItem}
-          />}
         >
           <Textarea
             disabled={false}
