@@ -33,9 +33,9 @@ export const findTodoWithId = (todos, id) => {
 
 export const sortTodoByDate = (todos, descending = false) => {
     for (let i = 0; i < todos.length - 1; i++) {
-        const e1 = todos[i].createdAt;
         let index = i;
         for (let j = i+1; j < todos.length; j++) {
+            const e1 = todos[index].createdAt;
             const e2 = todos[j].createdAt;
             if (!descending) {
                 if (e2 < e1) {
