@@ -1,8 +1,8 @@
 export const normalizeTodo = (todos) => {
     for (let i = 0; i < todos.length - 1; i++) {
-        const e1 = todos[i].id;
         let index = i;
         for (let j = i+1; j < todos.length; j++) {
+            const e1 = todos[index].id;
             const e2 = todos[j].id;
 
             if (e2 < e1) {
