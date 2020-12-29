@@ -177,7 +177,7 @@ class App extends React.Component {
               <h4>To-do</h4>
               <div id="todo-list">
                 {filterTodos(this.props.todo.todos, false).map((value, index) => (
-                  <TodoItem onCheckChanged={e => this.doneTodo(e)} onTodoClick={e => this.editTodo(e)} completed={false} todoId={value.id} todoTitle={value.title}></TodoItem>
+                  <TodoItem key={value.id} onCheckChanged={e => this.doneTodo(e)} onTodoClick={e => this.editTodo(e)} completed={false} todoId={value.id} todoTitle={value.title}></TodoItem>
                 ))}
               </div>
             </div>
@@ -186,7 +186,7 @@ class App extends React.Component {
               <h4>Completed</h4>
               <div id="completed-list">
                 {filterTodos(this.props.todo.todos, true).map((value, index) => (
-                  <TodoItem onCheckChanged={e => this.unDoneTodo(e)} onTodoClick={e => this.editTodo(e)} completed={true} todoId={value.id} todoTitle={value.title}></TodoItem>
+                  <TodoItem key={value.id} onCheckChanged={e => this.unDoneTodo(e)} onTodoClick={e => this.editTodo(e)} completed={true} todoId={value.id} todoTitle={value.title}></TodoItem>
                 ))}
               </div>
             </div>
