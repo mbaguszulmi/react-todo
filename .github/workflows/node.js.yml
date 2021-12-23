@@ -12,22 +12,19 @@ jobs:
     name: Prepare
     runs-on: ubuntu-latest
     steps:
-      - run: node -v
+      - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
           node-version: '10.15.0'
-      - uses: actions/checkout@v2
-      - uses: borales/actions-yarn@v2.3.0
-        with:
-          cmd: install
+      - run: |
+          npm install -g yarn
+          yarn install
           
   test:
     name: Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: borales/actions-yarn@v2.3.0
-        with:
-          cmd: test
+      - run: yarn test
     needs:
       - prepare
