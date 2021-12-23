@@ -12,11 +12,11 @@ jobs:
     name: Prepare
     runs-on: ubuntu-latest
     steps:
+      - run: node -v
       - uses: actions/checkout@v2
       - uses: borales/actions-yarn@v2.3.0
         with:
           cmd: install
-      - run: node -v
           
   test:
     name: Test
