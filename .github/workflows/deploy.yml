@@ -25,8 +25,9 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          echo ::set-env name=git_hash::$(git rev-parse --short "$GITHUB_SHA")
+      - name: "Setting git commit hash"
+        run: |
+          echo "git_hash=$GITHUB_SHA >> $GITHUB_ENV
       - uses: actions/checkout@v2
       - name: Cache builds
         uses: actions/cache@v2
@@ -44,8 +45,9 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          echo ::set-env name=git_hash::$(git rev-parse --short "$GITHUB_SHA")
+      - name: "Setting git commit hash"
+        run: |
+          echo "git_hash=$GITHUB_SHA >> $GITHUB_ENV
       - uses: actions/checkout@v2
       - name: Cache builds
         uses: actions/cache@v2
