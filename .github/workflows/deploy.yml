@@ -40,9 +40,11 @@ jobs:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - run: yarn build
+    needs:
+      - prepare
   
   deploy:
-    name: Build
+    name: Deploy
     runs-on: ubuntu-latest
     steps:
       - name: "Setting git commit hash"
@@ -59,3 +61,5 @@ jobs:
         with:
           branch: gh-pages # The branch the action should deploy to.
           folder: build # The folder the action should deploy.
+    needs:
+      - build
