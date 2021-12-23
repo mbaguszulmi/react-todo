@@ -42,7 +42,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '10.15.0'
-      - run: yarn build
+      - run: CI='' yarn build
     needs:
       - prepare
   
