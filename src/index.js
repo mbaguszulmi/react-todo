@@ -1,8 +1,7 @@
 import ReactDOM from 'react-dom';
 import './index.css';
-import './main-renderer';
+import { appRender } from './main-renderer';
 import reportWebVitals from './reportWebVitals';
-
 
 ReactDOM.render(
   appRender(), document.getElementById('root')
