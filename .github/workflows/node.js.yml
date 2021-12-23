@@ -24,4 +24,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: yarn test
+    needs:
+      - prepare
           
