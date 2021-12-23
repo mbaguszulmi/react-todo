@@ -25,8 +25,9 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          echo ::set-env name=git_hash::$(git rev-parse --short "$GITHUB_SHA")
+      - name: "Setting git commit hash"
+        run: |
+          echo "git_hash=$GITHUB_SHA >> $GITHUB_ENV
       - uses: actions/checkout@v2
       - name: Cache builds
         uses: actions/cache@v2
@@ -39,13 +40,16 @@ jobs:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - run: yarn build
+    needs:
+      - prepare
   
   deploy:
-    name: Build
+    name: Deploy
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          echo ::set-env name=git_hash::$(git rev-parse --short "$GITHUB_SHA")
+      - name: "Setting git commit hash"
+        run: |
+          echo "git_hash=$GITHUB_SHA >> $GITHUB_ENV
       - uses: actions/checkout@v2
       - name: Cache builds
         uses: actions/cache@v2
@@ -57,3 +61,5 @@ jobs:
         with:
           branch: gh-pages # The branch the action should deploy to.
           folder: build # The folder the action should deploy.
+    needs:
+      - build
